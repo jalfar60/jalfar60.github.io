@@ -22,6 +22,7 @@ def postbook(request):
     print("Hello -Ira")
     print("Hello -tristian")
     print("Hello :3 - Jayson")
+    print("Hello :D - Mia")
     submitted = False
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
