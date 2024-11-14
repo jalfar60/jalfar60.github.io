@@ -20,6 +20,7 @@ def index(request):
 
 def postbook(request):
     print("Hello -Ira")
+    print("Hello -tristian")
     submitted = False
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
