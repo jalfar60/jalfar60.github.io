@@ -1,2 +1,3 @@
-/bookMng/__pycache__/*
-/bookEx/__pycache__/*
+**/__pycache__/
+*.pyc
+*.pyo
