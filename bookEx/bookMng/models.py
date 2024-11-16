@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class MainMenu(models.Model):
@@ -22,4 +22,39 @@ class Book(models.Model):
     username = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.id)
+        return f"Book) bookname: {self.name}, username: {self.username}"
+
+
+class Rating(models.Model):
+    rating = models.IntegerField(
+        blank=False, null=False, validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    book = models.ForeignKey(
+        Book, blank=False, on_delete=models.CASCADE, null=False, related_name="ratings"
+    )
+    user = models.ForeignKey(
+        User, blank=False, on_delete=models.CASCADE, null=False, related_name="ratings"
+    )
+
+    def __str__(self):
+        return f"Book: {self.book}, user: {self.user}, rating: {self.rating}"
+
+
+class Favorite(models.Model):
+    book = models.ForeignKey(
+        Book,
+        blank=False,
+        on_delete=models.CASCADE,
+        null=False,
+        related_name="favorites",
+    )
+    user = models.ForeignKey(
+        User,
+        blank=False,
+        on_delete=models.CASCADE,
+        null=False,
+        related_name="favorites",
+    )
+
+    def __str__(self):
+        return f"Favorite Book: {self.book}, user: {self.user}"

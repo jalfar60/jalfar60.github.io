@@ -1,16 +1,12 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-
-from bookMng.forms import BookForm
-from .models import MainMenu
-from .models import Book
-
-from .forms import BookForm
-from django.http import HttpResponseRedirect
-
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
+from django.utils.functional import SimpleLazyObject
+
+from bookMng.forms import BookForm
+from .models import Book, MainMenu, Rating
 
 
 def index(request):
@@ -18,10 +14,6 @@ def index(request):
 
 
 def postbook(request):
-    print("Hello -Ira")
-    print("Hello -tristian")
-    print("Hello :3 - Jayson")
-    print("Hello :D - Mia")
     submitted = False
     if request.method == "POST":
         form = BookForm(request.POST, request.FILES)
@@ -45,15 +37,11 @@ def postbook(request):
 
 
 def displaybook(request):
-
     books = Book.objects.all()
-
-    for b in books:
-        b.pic_path = b.picture.url[14:]
 
     return render(
         request,
-        "bookMng/displayooks.html",
+        "bookMng/displaybooks.html",
         {
             "item_list": MainMenu.objects.all(),
             "books": books,
@@ -62,7 +50,6 @@ def displaybook(request):
 
 
 def mybooks(request):
-
     books = Book.objects.filter(username=request.user)
 
     for b in books:
@@ -79,9 +66,12 @@ def mybooks(request):
 
 
 def book_detail(request, book_id):
-
     book = Book.objects.get(id=book_id)
-    book.pic_path = book.picture.url[14:]
+    # likeBook(2, book=book, user=request.user)
+    # book.pic_path = book.picture.url[14:]
+    # print(type(book))
+    # ratings = list(map(lambda a: a.rating, book.ratings.all()))
+    # print(ratings)
 
     return render(
         request,
@@ -99,18 +89,22 @@ def aboutus(request):
     )
 
 
-def book_delete(request, book_id):
+def deletebook(request, book_id):
 
     book = Book.objects.get(id=book_id)
     book.delete()
 
     return render(
         request,
-        "bookMng/book_delete.html",
+        "bookMng/deletebook.html",
         {
             "item_list": MainMenu.objects.all(),
         },
     )
+
+
+def likeBook(rating, book, user):
+    Rating.objects.create(rating=rating, book=book, user=user)
 
 
 class Register(CreateView):
