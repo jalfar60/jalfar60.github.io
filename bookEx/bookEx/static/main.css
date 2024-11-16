@@ -4,6 +4,28 @@ body {
     padding: 0;
 }
 
+/* Navbar */
+.navbar__container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    border: 1px solid grey;
+    padding: 0 0.5rem;
+}
+.navbar {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+.navbar li {
+    list-style-type: none;
+}
+.navbar a {
+    text-decoration: none;
+}
+
 .banner {
     width: 100%;
     height: 200px;

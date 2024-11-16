@@ -7,43 +7,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
         {% block title %}
-            My page title
+            Bookagram
         {% endblock title %}
     </title>
     <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
 <body>
-    <span>
-        {% if user.is_authenticated %}
-            {{ user.username }}
-            <form action="{% url 'logout' %}?next=/" method="post">
-                <button type="submit" >
-                    Logout
-                </button>
-                {% csrf_token %}
-            </form>
-        {% else %}
-            Not Logged In
-            <a href="{% url 'login' %}?next=/">Login</a>
-        {% endif %}
-    </span>
-
-
-
-    <div class="banner">
+    <!-- <div class="banner">
         <img src="{% static 'banner.jpg' %}" alt="Banner Image">
-    </div>
-    <div class="container">
-        <div class="menu-bar">
-            <ul>
-                {% block sidenav %}
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#contact">Contact</a></li>
-                {% endblock sidenav %}
-            </ul>
+    </div> -->
+    
+    <!-- Navbar -->
+    <div class="navbar__container">
+        <span>
+            {% if user.is_authenticated %}
+                {{ user.username }}
+                <form action="{% url 'logout' %}?next=/" method="post">
+                    <button type="submit" >
+                        Logout
+                    </button>
+                    {% csrf_token %}
+                </form>
+            {% else %}
+                Not Logged In
+                <a href="{% url 'login' %}?next=/">Login</a>
+            {% endif %}
+        </span>
+
+        <ul class="navbar">
+            <li><a href="/postbook">Post</a></li>
+            <li><a href="/home">Feed</a></li>
+            <li><a href="/mybooks">My Books</a></li>
+            <li><a href="/aboutus">About us</a></li>
+        </ul>
+        <div class="searchbar__container">
+            <input type="text" name="searchbar" id="searchbar" placeholder="Search for books...">
+            <button>Search</button>
         </div>
+    </div>
+
+    <!-- Container -->
+    <div class="container">
         <div class="main-content">
             {% block content %}
             <h1>Main Content Area</h1>
@@ -51,6 +55,8 @@
             {% endblock content %}
         </div>
     </div>
+
+    <!-- Footer -->
     <div class="footer">
         <p>&copy; CS3337 FALL 2024 Section 2</p>
     </div>
