@@ -34,21 +34,22 @@
             {% endif %}
         </span>
 
-        <ul class="navbar">
-            <li><a href="/postbook">Post</a></li>
-            <li><a href="/home">Feed</a></li>
-            <li><a href="/mybooks">My Books</a></li>
-            <li><a href="/aboutus">About us</a></li>
-        </ul>
         <div class="searchbar__container">
             <input type="text" name="searchbar" id="searchbar" placeholder="Search for books...">
             <button>Search</button>
         </div>
+
+        <ul class="navbar">
+            <li><a href="/displaybooks">Feed</a></li>
+            <li><a href="/postbook">Post</a></li>
+            <li><a href="/mybooks">My Books</a></li>
+            <li><a href="/aboutus">About us</a></li>
+        </ul>
     </div>
 
     <!-- Container -->
     <div class="container">
-        <div class="main-content">
+        <div class="main_content">
             {% block content %}
             <h1>Main Content Area</h1>
             <p>This is the main content area.</p>

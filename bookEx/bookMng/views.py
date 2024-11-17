@@ -9,10 +9,6 @@ from bookMng.forms import BookForm
 from .models import Book, MainMenu, Rating
 
 
-def index(request):
-    return render(request, "bookMng/index.html", {"item_list": MainMenu.objects.all()})
-
-
 def postbook(request):
     submitted = False
     if request.method == "POST":
@@ -32,7 +28,7 @@ def postbook(request):
     return render(
         request,
         "bookMng/postbook.html",
-        {"form": form, "item_list": MainMenu.objects.all(), "submitted": submitted},
+        {"form": form, "submitted": submitted},
     )
 
 
@@ -43,7 +39,6 @@ def displaybook(request):
         request,
         "bookMng/displaybooks.html",
         {
-            "item_list": MainMenu.objects.all(),
             "books": books,
         },
     )
@@ -59,7 +54,6 @@ def mybooks(request):
         request,
         "bookMng/mybooks.html",
         {
-            "item_list": MainMenu.objects.all(),
             "books": books,
         },
     )
@@ -68,7 +62,7 @@ def mybooks(request):
 def book_detail(request, book_id):
     book = Book.objects.get(id=book_id)
     # likeBook(2, book=book, user=request.user)
-    # book.pic_path = book.picture.url[14:]
+    book.pic_path = book.picture.url[14:]
     # print(type(book))
     # ratings = list(map(lambda a: a.rating, book.ratings.all()))
     # print(ratings)
@@ -77,7 +71,6 @@ def book_detail(request, book_id):
         request,
         "bookMng/book_detail.html",
         {
-            "item_list": MainMenu.objects.all(),
             "book": book,
         },
     )
@@ -85,7 +78,8 @@ def book_detail(request, book_id):
 
 def aboutus(request):
     return render(
-        request, "bookMng/aboutus.html", {"item_list": MainMenu.objects.all()}
+        request,
+        "bookMng/aboutus.html",
     )
 
 
@@ -97,13 +91,10 @@ def deletebook(request, book_id):
     return render(
         request,
         "bookMng/deletebook.html",
-        {
-            "item_list": MainMenu.objects.all(),
-        },
     )
 
 
-def likeBook(rating, book, user):
+def likeBook(rating: int, book: Book, user):
     Rating.objects.create(rating=rating, book=book, user=user)
 
 

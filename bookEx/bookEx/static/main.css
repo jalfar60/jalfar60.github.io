@@ -1,23 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+}
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Navbar */
 .navbar__container {
+    /* height: 3rem; */
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    border: 1px solid grey;
-    padding: 0 0.5rem;
+    border-bottom: 1px solid grey;
+    padding: 0.5rem;
+    position: sticky;
+    top: 0;
+    background-color: white;
 }
 .navbar {
     display: flex;
     flex-direction: row;
     gap: 1rem;
+}
+.searchbar__container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .navbar li {
     list-style-type: none;
@@ -26,49 +43,74 @@ body {
     text-decoration: none;
 }
 
-.banner {
-    width: 100%;
-    height: 200px;
-}
 
-.banner img {
-    width: 100%;
-    height: 100%;
-}
-
+/* Main Content */
 .container {
     display: flex;
+    background-color: #f9f9f9;
+    flex-grow: 1;
+    padding: 1rem 0;
 }
-
-.menu-bar {
-    width: 20%;
-    background-color: #f4f4f4;
-    padding: 15px;
-}
-
-.menu-bar ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.menu-bar ul li {
-    margin-bottom: 10px;
-}
-
-.menu-bar ul li a {
-    text-decoration: none;
-    color: #333;
-}
-
-.main-content {
+.main_content {
     width: 80%;
-    padding: 15px;
+    margin: 0 auto;
 }
 
+/* Display Books */
+.book_card__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+}
+.book_card {
+    display: flex;
+    flex-direction: column;
+    width: 468px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    /* height: 600px; */
+}
+.book_card__header {
+    padding: 0.5rem;
+    border: 1px solid grey;
+}
+.book_card__img {
+    width: 100%;
+}
+.book_card__subsection {
+    padding: 0.5rem;
+    padding-bottom: 2rem;
+    background-color: white;
+    border: 1px solid grey;
+}
+
+/* Footer */
 .footer {
     background-color: #333;
+    height: 4rem;
     color: #fff;
     text-align: center;
     padding: 10px 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
 
+
+/* Utility classes */
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.space-between {
+    justify-content: space-between;
 }

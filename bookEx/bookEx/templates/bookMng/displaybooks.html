@@ -2,13 +2,27 @@
 {% load static %}
 
 {% block content %}
-  <h1>Display Book</h1>
-  <table border="2">
+  <div class="book_card__container">
     {% for book in books %}
-    <tr>
-      <td><a href="book_detail/{{ book.id }}">{{ book.name }}</a></td>
-      <td>{{ book.username }}</td>
-    </tr>
+    <div class="book_card">
+      <div class="book_card__header">
+        <h3>{{ book.username }} - <a href="book_detail/{{ book.id }}">{{ book.name }}</a></h3>
+      </div>
+      <img
+        src="{{ book.picture.name|slice:'7:' }}" 
+        alt="Picture of the book: {{ book.name }}"
+        class="book_card__img"
+      >
+      <div class="book_card__subsection">
+        <div class="flex-row space-between">
+          <span>*****</span>
+          <span>Save Icon</span>
+        </div>
+        <p>Average rating: 3*</p>
+        <p><b>{{book.username }}</b>: some desc</p>
+        <a href="#">View comments</a>
+      </div>
+    </div>
     {% endfor %}
-  </table>
+  </div>
 {% endblock content %}
