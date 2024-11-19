@@ -1,4 +1,6 @@
 {% load static %}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,7 +28,6 @@
     </div>
     
     <!-- Navbar -->
-<<<<<<< HEAD
     <div class="navbar navbar__container">
         <span>
             {% if user.is_authenticated %}
@@ -42,35 +43,6 @@
                 <a href="{% url 'login' %}?next=/">Login</a>
             {% endif %}
         </span>
-=======
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <a class="navbar-brand" href="/"><i class="bi bi-book"></i></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav mr-auto">
-                {% if user.is_authenticated %}
-                    <li class="nav-item active px-5">
-                        <form class="form-inline my-2 my-lg-0" action="{% url 'logout' %}?next=/" method="post">
-                            {{ user.username }}<button class="btn btn-outline-danger my-2 my-sm-0" type="submit">Logout</button>
-                            {% csrf_token %}
-                        </form>
-                    </li>
-                    <li class="nav-item px-5"><a class="nav-link" href="/displaybooks">Feed</a></li>
-                    <li class="nav-item px-5"><a class="nav-link" href="/postbook">Post</a></li>
-                    <li class="nav-item px-5"><a class="nav-link" href="/mybooks">My Books</a></li>
-                    <li class="nav-item px-5"><a class="nav-link" href="/aboutus">About Us</a></li>
-                {% else %}
-                    <li class="nav-item active px-5"><a class="nav-link btn btn-outline-success" href="{% url 'login' %}?next=/">Login</a></li>
-                    <li class="nav-item px-5"><a class="nav-link disabled" href="#">Feed</a></li>
-                    <li class="nav-item px-5"><a class="nav-link disabled" href="#">Post</a></li>
-                    <li class="nav-item px-5"><a class="nav-link disabled" href="#">My Books</a></li>
-                    <li class="nav-item px-5"><a class="nav-link disabled" href="#">About Us</a></li>
-                {% endif %}
-            </ul>
->>>>>>> d4d9530 (Tristan 11/18/24 1:00PM)
 
         <div class="searchbar__container">
             <input type="text" name="searchbar" id="searchbar" placeholder="Search for books...">
