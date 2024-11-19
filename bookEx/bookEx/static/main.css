@@ -22,11 +22,11 @@ body {
     gap: 1rem;
     border-bottom: 1px solid grey;
     padding: 0.5rem;
-    position: sticky;
+    position: sticky !important;
     top: 0;
     background-color: white;
 }
-.navbar {
+.navbar_links {
     display: flex;
     flex-direction: row;
     gap: 1rem;
@@ -36,10 +36,10 @@ body {
     left: 50%;
     transform: translateX(-50%);
 }
-.navbar li {
+.navbar_links li {
     list-style-type: none;
 }
-.navbar a {
+.navbar_links a {
     text-decoration: none;
 }
 
