@@ -59,7 +59,8 @@ body {
 /* Display Books */
 .book_card__container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 1rem;
     align-items: center;
     width: 100%;
@@ -67,7 +68,7 @@ body {
 .book_card {
     display: flex;
     flex-direction: column;
-    width: 468px;
+    width: 200px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     /* height: 600px; */
 }
