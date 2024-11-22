@@ -2,14 +2,20 @@
   {% load static %}
 
   {% block content %}
-    <h1>My Books </h1>
-  <table border = "2">
+  <table class="table" border="2">
+    <thead class="thead-dark">
+    <tr>
+      <th>Book Owner <i class="bi bi-person"></i></th>
+      <th>Book Details <i class="bi bi-card-list"></i></th>
+      <th>Book Remove <i class="bi bi-trash3"></i></th>
+    </tr>
+    </thead>
+
     {% for book in books %}
     <tr>
-      <td><a href="book_detail/{{ book.id }}">{{ book.name }}</a></td>
-      <td>{{ book.username }}</td>
-
-      <td><a href="deletebook/{{ book.id }}">DELETE</a></td>
+      <td>{{ book.username }} <a class="btn btn-outline-primary" href="/aboutus"><i class="bi bi-person-lines-fill"></i></a></td>
+      <td>{{ book.name }} <a class="btn btn-outline-warning" href="book_detail/{{ book.id }}"><i class="bi bi-card-list"></i></a></td>
+      <td>{{ book.name }} <a class="btn btn-outline-danger" href="deletebook/{{ book.id }}"><i class="bi bi-trash3-fill"></i></a></td>
     </tr>
     {% endfor %}
   </table>

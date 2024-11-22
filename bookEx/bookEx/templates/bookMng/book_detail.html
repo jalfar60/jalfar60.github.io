@@ -2,17 +2,53 @@
   {% load static %}
 
   {% block content %}
-    <h1>Book Detail</h1>
-  <table border = "2">
-    <tr>
-        <td> {{ book.name }}</td>
-      <td>{{ book.price }}</td>
-      <td>{{ book.username }}</td>
-        <td>{{ book.publishedate }}</td>
-      <td>
-        <img src="{% static book.pic_path %}" height="100"/>
-      </td>
-    </tr>
+    <h1>Book Details : "{{ book.name }}"</h1>
 
-  </table>
+      <div class="book_card">
+          <div class="book_card__header">
+            <h3>User: {{ book.username }}</h3>
+          </div>
+          <img height="200"
+            src="{% static book.pic_path %}"
+            class="img-thumbnail book_card__img"
+            alt="Picture of the book: {{ book.name }}">
+          <div class="book_card__subsection">
+            <div class="flex-row space-between">
+              <span>
+                  <table class="table">
+                      <thead class="thead">
+                        <th>Published</th>
+                      </thead>
+                        <tbody>
+                             <td>{{ book.publishedate }}</td>
+                        </tbody>
+                  </table>
+            </span>
+                <span>
+                  <table class="table">
+                      <thead class="thead">
+                        <th>Price</th>
+                      </thead>
+                        <tbody>
+                             <td>{{ book.price }}</td>
+                        </tbody>
+                  </table>
+            </span>
+            </div>
+          </div>
+        </div>
+<!--  <table border = "2">-->
+<!--    <tr>-->
+<!--        <td> {{ book.name }}</td>-->
+<!--      <td>{{ book.price }}</td>-->
+<!--      <td>{{ book.username }}</td>-->
+<!--        <td>{{ book.publishedate }}</td>-->
+<!--      <td>-->
+<!--        <img src="{% static book.pic_path %}" height="100"/>-->
+<!--      </td>-->
+<!--    </tr>-->
+<!--  <div>-->
+<!--    <p>{{ book.username }}</p>-->
+<!--  </div>-->
+<!--  </table>-->
   {% endblock content %}
