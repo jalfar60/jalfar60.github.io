@@ -2,22 +2,62 @@
 {% load static %}
 
 {% block content %}
-    <h1>Post Book Page</h1>
+    <H1>Post Book Page.</H1>
 
     {% if submitted %}
-    <p>Post book successfully</p>
+        <p>Post book successfully</p>
     {% else %}
-    <form action="" enctype="multipart/form-data" method="post" novalidate>
+    <form action="" enctype="multipart/form-data" method = "post" novalidate>
         <table>
-            {{ form.as_table }}
-            <tr>
-                <td>
-                    <input type="submit" value="Submit">
-                </td>
-            </tr>
+<!--            {{ form.as_table }}-->
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="basic-name">Book Name</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-pencil-fill"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="basic-name" placeholder="Enter Book Name" aria-describedby="basic-addon1" name="name">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="basic-url">Book URL</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3"><i class="bi bi-globe-americas"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="basic-url" placeholder="Enter Book URL" aria-describedby="basic-addon3" name="web">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="basic-price">Book Price</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="bi bi-gem"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="basic-price" placeholder="Enter Book Price" aria-label="Amount (to the nearest dollar)" name="price">
+                      <div class="input-group-append">
+                        <span class="input-group-text">.00</span>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <label for="inputGroupFile01">Book Image</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="bi bi-envelope-arrow-up"></i></span>
+              </div>
+              <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile01" placeholder="Enter Book Cover" name="picture">
+                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+              </div>
+            </div>
         </table>
+        <!--<input type="submit" class="btn btn-success" value="Submit" name="Submit">-->
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Book <i class="bi bi-check-all"></i></button>
         {% csrf_token %}
     </form>
     {% endif %}
-
 {% endblock content %}
