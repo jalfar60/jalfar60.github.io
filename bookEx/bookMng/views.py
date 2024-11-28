@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.functional import SimpleLazyObject
 
 from bookMng.forms import BookForm
-from .models import Book, MainMenu, Rating
+from .models import Book, MainMenu, Rating, Comment
 
 
 def postbook(request):
