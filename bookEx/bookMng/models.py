@@ -39,19 +39,6 @@ class Rating(models.Model):
     def __str__(self):
         return f"Rating: {self.rating} from Book: {self.book}, user: {self.user}, "
 
-    class Comment(models.Model):
-        comment = models.CharField(blank=False, null=False, max_length=200)
-        book = models.ForeignKey(
-            Book, blank=False, on_delete=models.CASCADE, null=False, related_name="comment"
-        )
-        user = models.ForeignKey(
-            User, blank=False, on_delete=models.CASCADE, null=False, related_name="comment"
-        )
-        comment_date_time = models.DateTimeField(auto_now=True)
-
-        def __str__(self):
-            return f"Comment: {self.comment} from Book: {self.book}, user: {self.user}, date: {self.commentdate}"
-=======
 
 class Comment(models.Model):
     comment = models.CharField(blank=False, null=False, max_length=200)
@@ -65,7 +52,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment: {self.comment} from Book: {self.book}, user: {self.user}, date: {self.commentdate}"
->>>>>>> 1aceb53f8fa2953b338870298a5174433f1674c3
 
 
 class Favorite(models.Model):
