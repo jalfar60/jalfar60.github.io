@@ -1,24 +1,33 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block content %}
     <H1>User Login </H1>
     <form action="{% url 'login' %}" method="post" >
         <table>
-            {{ form.as_table }}
-            <tr>
-                <td>
-                    <input type="submit" value="login">
-                </td>
-            </tr>
+<!--            {{ form.as_table }}-->
+                <div class="col-md-4">
+                    <label for="basic-name">Username</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-person-circle"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="basic-name" placeholder="Enter Username" aria-describedby="basic-addon1" name="username">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="basic-url">Password</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3"><i class="bi bi-key-fill"></i></span>
+                      </div>
+                      <input type="password" class="form-control" id="basic-url" placeholder="Enter Password" aria-describedby="basic-addon3" name="password">
+                    </div>
+                </div>
+<!--                    <input type="submit" value="login">-->
         </table>
-
-        <p>
-            To register <a href="{% url 'register' %}">Click Here</a>
-        </p>
-
-
+                <button type="submit" class="btn btn-primary">Login <i class="bi bi-check-all"></i></button>
+        <p>Don't have an account? <a href="{% url 'register' %}">Click Here</a> To Register</p>
       <input type="hidden" name="next" value="{{ next }}"/>
         {% csrf_token %}
     </form>
