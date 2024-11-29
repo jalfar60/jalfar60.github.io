@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.functional import SimpleLazyObject
 
 from bookMng.forms import BookForm
-from .models import Book, MainMenu, Rating, Comment
+from .models import Book, MainMenu, Rating, Comment, Favorite
 
 
 def postbook(request):
@@ -34,12 +34,22 @@ def postbook(request):
 
 def displaybook(request):
     books = Book.objects.all()
+    user_id = request.user.id
+
+    favorites = Favorite.objects.values_list("book_id", flat=True).filter(user_id=user_id)
+    
+    print(favorites)
+    print(books.values())
+    for book in books:
+        setattr(book, "is_favorite", book.id in favorites)
+
 
     return render(
         request,
         "bookMng/displaybooks.html",
         {
             "books": books,
+            "favorites": favorites
         },
     )
 
@@ -96,6 +106,17 @@ def deletebook(request, book_id):
 
 def likeBook(rating: int, book: Book, user):
     Rating.objects.create(rating=rating, book=book, user=user)
+
+# Utilities
+def getFavoritesByUserID(request, user_id: int):
+    # Returns an array of favorite books ids given the user_id.
+    favorites = Favorite.objects.filter(user_id=user_id)
+    book_ids = [favorite["book_id"] for favorite in favorites.values()]
+    data = {
+        "data": book_ids
+    }
+    print(data)
+    return JsonResponse(data)
 
 
 class Register(CreateView):

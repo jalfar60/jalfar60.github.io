@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block content %}
-  <div class="book_card__container">
+  <div id="book_card_container" class="book_card__container">
     <div class="row">
       {% for book in books %}
       <div class="col-md-4">
-        <div class="book_card">
+        <div id="book_card" name="{{book.id}}" class="book_card">
           <div class="book_card__header">
             <h3>{{ book.username }} - <a href="book_detail/{{ book.id }}">{{ book.name }}</a></h3>
           </div>
@@ -17,10 +17,10 @@
           <div class="book_card__subsection">
             <div class="flex-row space-between">
               <span>*****</span>
-              <span><i class="bi bi-clipboard2"></i></span>
+              <span><i id="card_favorites_icon" class="bi bi-bookmark"></i></span>
             </div>
             <p>Average rating: 3*</p>
-            <p><b>{{book.username }}</b>: (This user has not posted a description)</p>
+            <p><b>{{ book.username }}</b>: (This user has not posted a description)</p>
             <a href="#">View comments</a>
           </div>
         </div>
@@ -29,3 +29,31 @@
     </div>
   </div>
 {% endblock content %}
+
+{% block script %}
+  <script>
+    const fetchFavorites = async () => {
+      const favoriteBookIDs = await fetch("api/getFavoritesByUserID/7").then((res) => {
+        return res.json();
+      }).then((res) => {
+        return res.data;
+      })
+      const books = [...document.getElementsByClassName("book_card")];
+      console.log(books)
+      books.map((book) => {
+        const book_id = parseInt(book.getAttribute("name"))
+        const book_icon = document.getElementById("card_favorites_icon");
+        if (favoriteBookIDs.includes(book_id)) {
+          book_icon.setAttribute("class", "")
+          book_icon.setAttribute("class", "bi bi-bookmark-fill")
+        } else {
+          book_icon.setAttribute("class", "")
+          book_icon.setAttribute("class", "bi bi-bookmark-fill")
+        }
+      })
+
+      console.log(favoriteBookIDs)
+    }
+    fetchFavorites();
+  </script>
+{% endblock script %}

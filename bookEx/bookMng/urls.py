@@ -10,4 +10,6 @@ urlpatterns = [
     path("book_detail/<int:book_id>", views.book_detail, name="book_detail"),
     path("deletebook/<int:book_id>", views.deletebook, name="deletebook"),
     path("aboutus", views.aboutus, name="aboutus"),
+    path("api/getFavoritesByUserID/<int:user_id>", views.getFavoritesByUserID, name="getFavoritesByUserID"),
+
 ]
