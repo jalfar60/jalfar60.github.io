@@ -6,6 +6,7 @@ urlpatterns = [
     path("", views.displaybook, name="index"),
     path("postbook", views.postbook, name="postbook"),
     path("displaybooks", views.displaybook, name="displaybooks"),
+    path("user/<int:user_id>", views.displayUser, name="displayUser"),
     path("mybooks", views.mybooks, name="mybooks"),
     path("favoriteBooks", views.favoriteBooks, name="favoriteBooks"),
     path("book_detail/<int:book_id>", views.book_detail, name="book_detail"),

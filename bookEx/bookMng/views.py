@@ -6,9 +6,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.utils.functional import SimpleLazyObject
 
+from django.contrib.auth import get_user_model
+
 from bookMng.forms import BookForm
 from .models import Book, MainMenu, Rating, Comment, Favorite
 
+
+User = get_user_model()
 
 def verify_user_id(view_func):
     # Wrapper for checking if user is logged in before calling APIs below.
@@ -73,6 +77,24 @@ def mybooks(request):
         },
     )
 
+def displayUser(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({"status": "Failed. User does not exist"})
+
+    books = Book.objects.filter(username=user)
+
+    return render(
+        request,
+        "bookMng/displaybooks.html",
+        {
+            "books": books,
+            "user_id": user_id
+        },
+    )
+
+@verify_user_id
 def favoriteBooks(request):
     favoriteBooks = Favorite.objects.filter(user=request.user)
     favoriteBooks = [favoriteBook.book for favoriteBook in favoriteBooks]
