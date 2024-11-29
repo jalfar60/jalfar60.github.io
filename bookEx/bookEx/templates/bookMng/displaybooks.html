@@ -17,7 +17,7 @@
           <div class="book_card__subsection">
             <div class="flex-row space-between">
               <span>*****</span>
-              <span><i id="card_favorites_icon" class="bi bi-bookmark"></i></span>
+              <i class="card_favorites_icon clickable bi" onClick="toggleFavoriteBook({{ book.id }})"></i>
             </div>
             <p>Average rating: 3*</p>
             <p><b>{{ book.username }}</b>: (This user has not posted a description)</p>
@@ -32,28 +32,40 @@
 
 {% block script %}
   <script>
-    const fetchFavorites = async () => {
-      const favoriteBookIDs = await fetch("api/getFavoritesByUserID/7").then((res) => {
+    const fetchFavoriteBooks = async () => {
+      const user_id = "{{ user_id }}";
+      if (user_id == "-1") {
+        return;
+      }
+      
+      const favoriteBookIDs = await fetch("api/getFavoriteBooks").then((res) => {
         return res.json();
       }).then((res) => {
         return res.data;
       })
+
       const books = [...document.getElementsByClassName("book_card")];
-      console.log(books)
       books.map((book) => {
         const book_id = parseInt(book.getAttribute("name"))
-        const book_icon = document.getElementById("card_favorites_icon");
+        const book_icon = book.getElementsByClassName("card_favorites_icon")[0];
         if (favoriteBookIDs.includes(book_id)) {
-          book_icon.setAttribute("class", "")
-          book_icon.setAttribute("class", "bi bi-bookmark-fill")
+          book_icon.classList.remove("bi-bookmark")
+          book_icon.classList.add("bi-bookmark-fill")
         } else {
-          book_icon.setAttribute("class", "")
-          book_icon.setAttribute("class", "bi bi-bookmark-fill")
+          book_icon.classList.remove("bi-bookmark-fill")
+          book_icon.classList.add("bi-bookmark")
         }
       })
-
-      console.log(favoriteBookIDs)
     }
-    fetchFavorites();
+
+    const toggleFavoriteBook = async (book_id) => {
+      await fetch("api/toggleFavoritesByBookID/"+book_id).then(() => {
+        fetchFavoriteBooks();
+      })
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchFavoriteBooks();
+    })
   </script>
 {% endblock script %}

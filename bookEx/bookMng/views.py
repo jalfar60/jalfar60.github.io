@@ -1,3 +1,4 @@
+from functools import wraps
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
@@ -34,22 +35,14 @@ def postbook(request):
 
 def displaybook(request):
     books = Book.objects.all()
-    user_id = request.user.id
-
-    favorites = Favorite.objects.values_list("book_id", flat=True).filter(user_id=user_id)
-    
-    print(favorites)
-    print(books.values())
-    for book in books:
-        setattr(book, "is_favorite", book.id in favorites)
-
+    user_id = request.user.id if request.user else -1
 
     return render(
         request,
         "bookMng/displaybooks.html",
         {
             "books": books,
-            "favorites": favorites
+            "user_id": user_id
         },
     )
 
@@ -71,11 +64,7 @@ def mybooks(request):
 
 def book_detail(request, book_id):
     book = Book.objects.get(id=book_id)
-    # likeBook(2, book=book, user=request.user)
     book.pic_path = book.picture.url[14:]
-    # print(type(book))
-    # ratings = list(map(lambda a: a.rating, book.ratings.all()))
-    # print(ratings)
 
     return render(
         request,
@@ -107,17 +96,6 @@ def deletebook(request, book_id):
 def likeBook(rating: int, book: Book, user):
     Rating.objects.create(rating=rating, book=book, user=user)
 
-# Utilities
-def getFavoritesByUserID(request, user_id: int):
-    # Returns an array of favorite books ids given the user_id.
-    favorites = Favorite.objects.filter(user_id=user_id)
-    book_ids = [favorite["book_id"] for favorite in favorites.values()]
-    data = {
-        "data": book_ids
-    }
-    print(data)
-    return JsonResponse(data)
-
 
 class Register(CreateView):
     template_name = "registration/register.html"
@@ -127,3 +105,48 @@ class Register(CreateView):
     def form_valid(self, form):
         form.save()
         return HttpResponseRedirect(self.success_url)
+
+
+# Utilities
+def verify_user_id(view_func):
+    # Wrapper for checking if user is logged in before calling APIs below.
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        user_id = request.user.id if request.user.is_authenticated else -1
+        if user_id == -1:
+            return JsonResponse({"status": "failed"})
+        request.user_id = user_id
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+@verify_user_id
+def getFavoriteBooks(request):
+    # Returns an array of favorite books ids if the user is logged in.
+    user_id = request.user_id
+    
+    favorites = Favorite.objects.filter(user_id=user_id).values("book_id")
+    book_ids = [favorite["book_id"] for favorite in favorites.values()]
+    data = {
+        "data": book_ids
+    }
+
+    return JsonResponse(data)
+
+@verify_user_id
+def toggleFavoritesByBookID(request, book_id):
+    user_id = request.user_id
+
+    favoriteBooks = Favorite.objects.filter(user_id=user_id, book_id=book_id)
+    if len(favoriteBooks) > 0:
+        favoriteBook = favoriteBooks[0]
+        favoriteBook.delete()
+    else:
+        book = Book.objects.get(id=book_id)
+        Favorite.objects.create(book=book, user=request.user)
+
+
+    data = {
+        "book_id": book_id,
+        "status": "success"
+    }
+    return JsonResponse(data)
