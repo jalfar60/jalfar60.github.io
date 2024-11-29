@@ -15,4 +15,7 @@ urlpatterns = [
 
     path("api/getFavoriteBooks", views.getFavoriteBooks, name="getFavoriteBooks"),
     path("api/toggleFavoritesByBookID/<int:book_id>", views.toggleFavoritesByBookID, name="toggleFavoritesByBookID"),
+    path("api/rateByBookID/<int:book_id>", views.rateByBookID, name="rateByBookID"),
+    path("api/getRatingByBookID/<int:book_id>", views.getRatingByBookID, name="getRatingByBookID"),
+    path("api/getAverageRatingByBookID/<int:book_id>", views.getAverageRatingByBookID, name="getAverageRatingByBookID"),
 ]

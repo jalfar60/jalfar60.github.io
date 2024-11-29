@@ -1,4 +1,5 @@
-from functools import wraps
+from functools import wraps, reduce
+
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
@@ -183,6 +184,69 @@ def toggleFavoritesByBookID(request, book_id):
 
     data = {
         "book_id": book_id,
+        "status": "success"
+    }
+    return JsonResponse(data)
+
+@verify_user_id
+def getRatingByBookID(request, book_id):
+    user_id = request.user_id
+
+    try:
+        book = Book.objects.get(id=book_id)
+    except Book.DoesNotExist:
+        return JsonResponse({"status": "Failed. No rating available for this book or from this user."})
+
+    ratings = Rating.objects.filter(book=book, user=request.user)
+    if len(ratings) == 0:
+        return JsonResponse({"status": "Failed. No rating available for this book or from this user."})
+
+    data = {
+        "rating": ratings[0].rating,
+        "status": "success"
+    }
+    return JsonResponse(data)
+
+def getAverageRatingByBookID(request, book_id):
+    try:
+        book = Book.objects.get(id=book_id)
+    except Book.DoesNotExist:
+        return JsonResponse({"status": "Failed. No rating available for this book or from this user."})
+
+    ratings = Rating.objects.filter(book=book)
+    sum_of_ratings = reduce(lambda a,b: a.rating + b.rating, ratings)
+    total_raters = len(ratings)
+    avgRating = sum_of_ratings / total_raters
+
+    data = {
+        "avgRating": avgRating,
+        "status": "success"
+    }
+    return JsonResponse(data)
+
+@verify_user_id
+def rateByBookID(request, book_id):
+    user_id = request.user_id
+    rating_value = request.GET.get("rating")
+
+    try:
+        rating_value = int(rating_value)
+        if rating_value <= 0 or rating_value > 5:
+            return JsonResponse({"status": "Failed. Rating query can not be less than 1 or greater than 5."})
+    except TypeError:
+        return JsonResponse({ "status": "Failed. Ratings query can not be parsed into integer."})
+
+    ratings = Rating.objects.filter(user_id=user_id, book_id=book_id)
+    if len(ratings) == 0:
+        Rating.objects.create(rating=rating, book=book, user=request.user)
+    else:
+        rating = ratings[0]
+        rating.rating = rating_value
+        rating.save()
+
+    data = {
+        "book_id": book_id,
+        "rating": rating_value,
         "status": "success"
     }
     return JsonResponse(data)
