@@ -10,6 +10,19 @@ from bookMng.forms import BookForm
 from .models import Book, MainMenu, Rating, Comment, Favorite
 
 
+def verify_user_id(view_func):
+    # Wrapper for checking if user is logged in before calling APIs below.
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        user_id = request.user.id if request.user.is_authenticated else -1
+        if user_id == -1:
+            return JsonResponse({"status": "failed"})
+        request.user_id = user_id
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+
+@verify_user_id
 def postbook(request):
     submitted = False
     if request.method == "POST":
@@ -46,18 +59,30 @@ def displaybook(request):
         },
     )
 
-
+@verify_user_id
 def mybooks(request):
+    user_id = request.user_id
     books = Book.objects.filter(username=request.user)
-
-    for b in books:
-        b.pic_path = b.picture.url[14:]
 
     return render(
         request,
-        "bookMng/mybooks.html",
+        "bookMng/displaybooks.html",
         {
             "books": books,
+            "user_id": user_id
+        },
+    )
+
+def favoriteBooks(request):
+    favoriteBooks = Favorite.objects.filter(user=request.user)
+    favoriteBooks = [favoriteBook.book for favoriteBook in favoriteBooks]
+
+    return render(
+        request,
+        "bookMng/displaybooks.html",
+        {
+            "books": favoriteBooks,
+            "user_id": request.user.id
         },
     )
 
@@ -108,17 +133,6 @@ class Register(CreateView):
 
 
 # Utilities
-def verify_user_id(view_func):
-    # Wrapper for checking if user is logged in before calling APIs below.
-    @wraps(view_func)
-    def wrapper(request, *args, **kwargs):
-        user_id = request.user.id if request.user.is_authenticated else -1
-        if user_id == -1:
-            return JsonResponse({"status": "failed"})
-        request.user_id = user_id
-        return view_func(request, *args, **kwargs)
-    return wrapper
-
 @verify_user_id
 def getFavoriteBooks(request):
     # Returns an array of favorite books ids if the user is logged in.

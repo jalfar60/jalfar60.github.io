@@ -44,10 +44,11 @@
                           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                               <h4 class="dropdown-header">{{ user.username }}</h4>
                               <div class="dropdown-divider"></div>
-                                  <form class="px-4 py-3" action="{% url 'logout' %}?next=/" method="post">
-                                        <button class="btn btn-outline-danger" type="submit">Logout</button>
-                                        {% csrf_token %}
-                                    </form>
+                              <a class="px-4 py-4" href="/favoriteBooks">My Favorite Books</a>
+                                <form class="px-4 py-3" action="{% url 'logout' %}?next=/" method="post">
+                                    <button class="btn btn-outline-danger" type="submit">Logout</button>
+                                    {% csrf_token %}
+                                </form>
                           </div>
                         </div>
                     </li>
