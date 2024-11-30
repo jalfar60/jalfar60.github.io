@@ -139,7 +139,7 @@ def deletebook(request, book_id):
     return render(
         request,
         "bookMng/deletebook.html",
-    )
+        )
 
 
 def likeBook(rating: int, book: Book, user):
