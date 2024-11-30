@@ -42,7 +42,7 @@
                   <span>*****</span>
                   <i class="card_favorites_icon clickable bi" onClick="toggleFavoriteBook({{ book.id }})"></i>
                 </div>
-                <p>Average rating: 3*</p>
+                <p class="card_avg_rating">Average rating: 3*</p>
                 <p><b>{{ book.username }}</b>: (This user has not posted a description)</p>
                 <a href="#">View comments</a>
               </div>
@@ -86,9 +86,44 @@
         fetchFavoriteBooks();
       })
     }
+    
+    const fetchAverageBookRatings = async () => {
+      const fetchAverageBookRating = async (book_id) => {
+        return await fetch("/api/getAverageRatingByBookID/"+book_id).then((res) => {
+          if (!res.ok) {
+            return 0;
+          }
+          return res.json();
+        }).then((res) => {
+          return res.avgRating;
+        })
+      }
+      
+      const books = [...document.getElementsByClassName("book_card")];
+      books.map((book) => {
+        const book_id = parseInt(book.getAttribute("name"))
+        fetchAverageBookRating(book_id).then((avg_rating) => {
+          let avg_book_rating_element = book.getElementsByClassName("card_avg_rating")[0];
+          
+          if (avg_rating == 0) {
+            avg_book_rating_element.innerHTML = "Average rating: N/A";
+          } else {
+            avg_book_rating_element.innerHTML = "Average rating: " + avg_rating.toString() + "&#9733;";
+          }
+        });
+        // if (favoriteBookIDs.includes(book_id)) {
+        //   book_icon.classList.remove("bi-bookmark")
+        //   book_icon.classList.add("bi-bookmark-fill")
+        // } else {
+        //   book_icon.classList.remove("bi-bookmark-fill")
+        //   book_icon.classList.add("bi-bookmark")
+        // }
+      })
+    }
 
     document.addEventListener("DOMContentLoaded", () => {
       fetchFavoriteBooks();
+      fetchAverageBookRatings();
     })
   </script>
 {% endblock script %}

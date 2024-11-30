@@ -83,7 +83,7 @@ def displayUser(request, user_id):
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
-        return JsonResponse({"status": "Failed. User does not exist"})
+        return JsonResponse({"status": "failed. User does not exist"})
 
     books = Book.objects.filter(username=user)
 
@@ -208,11 +208,11 @@ def getRatingByBookID(request, book_id):
     try:
         book = Book.objects.get(id=book_id)
     except Book.DoesNotExist:
-        return JsonResponse({"status": "Failed. No rating available for this book or from this user."})
+        return JsonResponse({"status": "failed. No rating available for this book or from this user."})
 
     ratings = Rating.objects.filter(book=book, user=request.user)
     if len(ratings) == 0:
-        return JsonResponse({"status": "Failed. No rating available for this book or from this user."})
+        return JsonResponse({"status": "failed. No rating available for this book or from this user."})
 
     data = {
         "rating": ratings[0].rating,
@@ -224,9 +224,15 @@ def getAverageRatingByBookID(request, book_id):
     try:
         book = Book.objects.get(id=book_id)
     except Book.DoesNotExist:
-        return JsonResponse({"status": "Failed. No rating available for this book or from this user."})
+        return JsonResponse({"status": "failed. No rating available for this book or from this user."})
 
     ratings = Rating.objects.filter(book=book)
+    if len(ratings) == 0:
+        return JsonResponse({
+            "avgRating": 0,
+            "status": "failed. No rating available for this book or from this user."
+        })
+
     sum_of_ratings = reduce(lambda a,b: a.rating + b.rating, ratings)
     total_raters = len(ratings)
     avgRating = sum_of_ratings / total_raters
@@ -245,9 +251,9 @@ def rateByBookID(request, book_id):
     try:
         rating_value = int(rating_value)
         if rating_value <= 0 or rating_value > 5:
-            return JsonResponse({"status": "Failed. Rating query can not be less than 1 or greater than 5."})
+            return JsonResponse({"status": "failed. Rating query can not be less than 1 or greater than 5."})
     except TypeError:
-        return JsonResponse({ "status": "Failed. Ratings query can not be parsed into integer."})
+        return JsonResponse({ "status": "failed. Ratings query can not be parsed into integer."})
 
     ratings = Rating.objects.filter(user_id=user_id, book_id=book_id)
     if len(ratings) == 0:
