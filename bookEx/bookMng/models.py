@@ -19,7 +19,7 @@ class Book(models.Model):
     publishedate = models.DateField(auto_now=True)
     picture = models.FileField(upload_to="bookEx/static/uploads")
     pic_path = models.CharField(max_length=300, editable=False, blank=True)
-    username = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
+    username = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE, related_name="books")
 
     def __str__(self):
         return f"Book) bookname: {self.name}, username: {self.username}"
