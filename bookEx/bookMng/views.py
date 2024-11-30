@@ -123,6 +123,18 @@ def book_detail(request, book_id):
         },
     )
 
+def search(request):
+    user_id = request.user.id if request.user else -1
+    searchbar = request.POST['searchbar']
+    searchbooks = Book.objects.filter(name__contains=searchbar)
+    return render(
+        request,
+        "bookMng/displaybooks.html",
+        {
+            "searchbar": searchbar,
+            "books": searchbooks,
+            "user_id": user_id,
+        })
 
 def aboutus(request):
     return render(

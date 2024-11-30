@@ -12,10 +12,12 @@ urlpatterns = [
     path("book_detail/<int:book_id>", views.book_detail, name="book_detail"),
     path("deletebook/<int:book_id>", views.deletebook, name="deletebook"),
     path("aboutus", views.aboutus, name="aboutus"),
+    path("search", views.search, name="search"),
 
     path("api/getFavoriteBooks", views.getFavoriteBooks, name="getFavoriteBooks"),
     path("api/toggleFavoritesByBookID/<int:book_id>", views.toggleFavoritesByBookID, name="toggleFavoritesByBookID"),
     path("api/rateByBookID/<int:book_id>", views.rateByBookID, name="rateByBookID"),
     path("api/getRatingByBookID/<int:book_id>", views.getRatingByBookID, name="getRatingByBookID"),
     path("api/getAverageRatingByBookID/<int:book_id>", views.getAverageRatingByBookID, name="getAverageRatingByBookID"),
+
 ]

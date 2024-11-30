@@ -2,6 +2,12 @@
 {% load static %}
 
 {% block content %}
+  {% if searchbar %}
+    <h1>Searching... {{ searchbar }}</h1>
+    {% if books|length == 0 %}
+      <h4>No matching books with that title found <i class="bi bi-emoji-frown"></i></h4>
+      {% endif %}
+  {% endif %}
   <div id="book_card_container" class="book_card__container">
     <div class="row">
       {% for book in books %}
