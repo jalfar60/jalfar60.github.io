@@ -57,6 +57,26 @@
         }
       })
     }
+    const fetchAverageBookRatings = async () => {
+      const favoriteBookIDs = await fetch("/api/getAverageRatingByBookID/15").then((res) => {
+        return res.json();
+      }).then((res) => {
+        return res.data;
+      })
+      alert("hi")
+      // const books = [...document.getElementsByClassName("book_card")];
+      // books.map((book) => {
+      //   const book_id = parseInt(book.getAttribute("name"))
+      //   const book_icon = book.getElementsByClassName("card_favorites_icon")[0];
+      //   if (favoriteBookIDs.includes(book_id)) {
+      //     book_icon.classList.remove("bi-bookmark")
+      //     book_icon.classList.add("bi-bookmark-fill")
+      //   } else {
+      //     book_icon.classList.remove("bi-bookmark-fill")
+      //     book_icon.classList.add("bi-bookmark")
+      //   }
+      // })
+    }
 
     const toggleFavoriteBook = async (book_id) => {
       await fetch("/api/toggleFavoritesByBookID/"+book_id).then(() => {
@@ -66,6 +86,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       fetchFavoriteBooks();
+      fetchAverageBookRatings();
     })
   </script>
 {% endblock script %}
