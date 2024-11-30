@@ -73,6 +73,7 @@ def mybooks(request):
         request,
         "bookMng/displaybooks.html",
         {
+            "myBook": 1,
             "books": books,
             "user_id": user_id
         },

@@ -8,7 +8,18 @@
       <div class="col-md-4">
         <div id="book_card" name="{{book.id}}" class="book_card">
           <div class="book_card__header">
-            <h3><a href="/user/{{ book.username.id }}">{{ book.username }}</a> - <a href="book_detail/{{ book.id }}">{{ book.name }}</a></h3>
+            {% if myBook == 1 %}
+              <div class="flex-row space-between">
+                <h3>{{ book.username }} - <a href="/book_detail/{{ book.id }}">{{ book.name }}</a></h3>
+                <label><a class="btn btn-outline-dark" href="deletebook/{{ book.id }}"><i class="bi bi-trash3-fill"></i></a></label>
+              </div>
+            {% else %}
+              {% if book.username.id == user_id%}
+                <h3>{{ book.username }} - <a href="/book_detail/{{ book.id }}">{{ book.name }}</a></h3>
+              {% else %}
+                <h3><a href="/user/{{ book.username.id }}">{{ book.username }}</a> - <a href="/book_detail/{{ book.id }}">{{ book.name }}</a></h3>
+              {% endif %}
+            {% endif %}
           </div>
           <img width="200"
             src="{% static book.picture.name|slice:'14:' %}"
