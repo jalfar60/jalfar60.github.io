@@ -39,7 +39,7 @@
                 alt="Picture of the book: {{ book.name }}">
               <div class="book_card__subsection">
                 <div class="flex-row space-between">
-                  <span>*****</span>
+                  <div class="card_rating_by_user"></div>
                   <i class="card_favorites_icon clickable bi" onClick="toggleFavoriteBook({{ book.id }})"></i>
                 </div>
                 <p class="card_avg_rating">Average rating: 3*</p>
@@ -104,26 +104,69 @@
         const book_id = parseInt(book.getAttribute("name"))
         fetchAverageBookRating(book_id).then((avg_rating) => {
           let avg_book_rating_element = book.getElementsByClassName("card_avg_rating")[0];
-          
           if (avg_rating == 0) {
             avg_book_rating_element.innerHTML = "Average rating: N/A";
           } else {
             avg_book_rating_element.innerHTML = "Average rating: " + avg_rating.toString() + "&#9733;";
           }
         });
-        // if (favoriteBookIDs.includes(book_id)) {
-        //   book_icon.classList.remove("bi-bookmark")
-        //   book_icon.classList.add("bi-bookmark-fill")
-        // } else {
-        //   book_icon.classList.remove("bi-bookmark-fill")
-        //   book_icon.classList.add("bi-bookmark")
-        // }
+      })
+    }
+
+    const fetchUserBookRatings = async () => {
+      const user_id = "{{ user_id }}";
+      if (user_id == "-1") {
+        return;
+      }
+
+      const fetchUserBookRating = async (book_id) => {
+        return await fetch("/api/getRatingByBookID/"+book_id).then((res) => {
+          if (!res.ok) {
+            return 0;
+          }
+          return res.json();
+        }).then((res) => {
+          return res.rating;
+        })
+      }
+      
+      const books = [...document.getElementsByClassName("book_card")];
+      books.map((book) => {
+        let user_book_rating_element = book.getElementsByClassName("card_rating_by_user")[0];
+        const book_id = parseInt(book.getAttribute("name"))
+        
+        fetchUserBookRating(book_id).then((user_rating) => {
+          for (let star_val = 1; star_val <= 5; star_val++) {
+            let star_element = document.createElement("i");
+            if (star_val <= user_rating) {
+              star_element.className = "clickable bi bi-star-fill star";
+            } else {
+              star_element.className = "clickable bi bi-star star";
+            }
+
+            star_element.addEventListener('click', () => {
+              fetch(`/api/rateByBookID/${book_id}?rating=${star_val}`).then(() => {
+                fetchAverageBookRatings();
+              })
+            })
+            star_element.addEventListener('mouseenter', () => {
+              console.log(`hi: ${star_val}`)
+            })
+            star_element.addEventListener('mouseleave', () => {
+              console.log(`bye: ${star_val}`)
+            })
+
+            user_book_rating_element.appendChild(star_element);
+
+          }
+        });
       })
     }
 
     document.addEventListener("DOMContentLoaded", () => {
       fetchFavoriteBooks();
       fetchAverageBookRatings();
+      fetchUserBookRatings();
     })
   </script>
 {% endblock script %}

@@ -21,7 +21,7 @@ def verify_user_id(view_func):
     def wrapper(request, *args, **kwargs):
         user_id = request.user.id if request.user.is_authenticated else -1
         if user_id == -1:
-            return JsonResponse({"status": "failed"})
+            return JsonResponse({"status": "failed. User not logged in"})
         request.user_id = user_id
         return view_func(request, *args, **kwargs)
     return wrapper
@@ -53,7 +53,7 @@ def postbook(request):
 
 def displaybook(request):
     books = Book.objects.all()
-    user_id = request.user.id if request.user else -1
+    user_id = request.user.id if request.user.is_authenticated else -1
 
     return render(
         request,
@@ -124,7 +124,7 @@ def book_detail(request, book_id):
     )
 
 def search(request):
-    user_id = request.user.id if request.user else -1
+    user_id = request.user.id if request.user.request.user else -1
     searchbar = request.POST['searchbar']
     searchbooks = Book.objects.filter(name__contains=searchbar)
     return render(
@@ -208,11 +208,17 @@ def getRatingByBookID(request, book_id):
     try:
         book = Book.objects.get(id=book_id)
     except Book.DoesNotExist:
-        return JsonResponse({"status": "failed. No rating available for this book or from this user."})
+        return JsonResponse({
+            "rating": 0,
+            "status": "failed. No rating available for this book or from this user."
+        })
 
     ratings = Rating.objects.filter(book=book, user=request.user)
     if len(ratings) == 0:
-        return JsonResponse({"status": "failed. No rating available for this book or from this user."})
+        return JsonResponse({
+            "rating": 0,
+            "status": "failed. No rating available for this book or from this user."
+        })
 
     data = {
         "rating": ratings[0].rating,
@@ -232,13 +238,16 @@ def getAverageRatingByBookID(request, book_id):
             "avgRating": 0,
             "status": "failed. No rating available for this book or from this user."
         })
-
-    sum_of_ratings = reduce(lambda a,b: a.rating + b.rating, ratings)
+    if len(ratings) == 1:
+        sum_of_ratings = ratings[0].rating
+    else:
+        sum_of_ratings = reduce(lambda a,b: a.rating + b.rating, ratings)
     total_raters = len(ratings)
     avgRating = sum_of_ratings / total_raters
 
     data = {
         "avgRating": avgRating,
+        "totalRaters": total_raters,
         "status": "success"
     }
     return JsonResponse(data)
@@ -247,7 +256,7 @@ def getAverageRatingByBookID(request, book_id):
 def rateByBookID(request, book_id):
     user_id = request.user_id
     rating_value = request.GET.get("rating")
-
+    
     try:
         rating_value = int(rating_value)
         if rating_value <= 0 or rating_value > 5:
@@ -256,13 +265,14 @@ def rateByBookID(request, book_id):
         return JsonResponse({ "status": "failed. Ratings query can not be parsed into integer."})
 
     ratings = Rating.objects.filter(user_id=user_id, book_id=book_id)
+
     if len(ratings) == 0:
-        Rating.objects.create(rating=rating, book=book, user=request.user)
+        book = Book.objects.get(id=book_id)
+        Rating.objects.create(rating=rating_value, book=book, user=request.user)
     else:
         rating = ratings[0]
         rating.rating = rating_value
         rating.save()
-
     data = {
         "book_id": book_id,
         "rating": rating_value,
