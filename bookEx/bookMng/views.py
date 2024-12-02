@@ -9,8 +9,8 @@ from django.utils.functional import SimpleLazyObject
 
 from django.contrib.auth import get_user_model
 
-from bookMng.forms import BookForm
 from .models import Book, MainMenu, Rating, Comment, Favorite
+from bookMng.forms import CommentForm
 
 
 User = get_user_model()
@@ -50,6 +50,26 @@ def postbook(request):
         {"form": form, "submitted": submitted},
     )
 
+# def postcomment(request):
+#     submitted = False
+#     if request.method == "POST":
+#         form = CommentForm(request.POST)
+#         if form.is_valid():
+#             comment = form.save(commit=False)
+#             try:
+#                 comment.book = request.bookid
+#                 comment.user = request.user
+#             except Exception:
+#                 pass
+#             comment.save()
+#     else:
+#         form = CommentForm()
+#         if "submitted" in request.GET:
+#             submitted = True
+#     return render(
+#         request,
+#         "bookMng/book_detail.html",
+#         {"form": form, "submitted": submitted},)
 
 def displaybook(request):
     books = Book.objects.all()
@@ -115,11 +135,25 @@ def book_detail(request, book_id):
     book = Book.objects.get(id=book_id)
     book.pic_path = book.picture.url[14:]
 
+    comments = Comment.objects.all()
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            try:
+                comment.book = book_id
+                comment.user = request.user
+            except Exception:
+                pass
+            comment.save()
+
     return render(
         request,
         "bookMng/book_detail.html",
         {
             "book": book,
+            "comments": comments,
         },
     )
 
