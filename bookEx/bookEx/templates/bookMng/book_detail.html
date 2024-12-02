@@ -51,4 +51,44 @@
 <!--    <p>{{ book.username }}</p>-->
 <!--  </div>-->
 <!--  </table>-->
+    <br>Comments:<br>
+    <table class="table" border="2">
+    <thead class="thead-dark">
+    <tr>
+      <th>User <i class="bi bi-person"></i></th>
+      <th>Comment <i class="bi bi-card-list"></i></th>
+      <th>Date <i class="bi bi-calendar-event"></i></th>
+    </tr>
+    </thead>
+
+    {% for comment in comments %}
+    <tr>
+      <td>{{ comment.user }}</td>
+      <td>{{ comment.comment }}</td>
+      <td>{{ comment.comment_date_time }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+    <br>Add new comment:
+    <form action="" enctype="multipart/form-data" method = "post" novalidate>
+        <table>
+<!--            {{ form.as_table }}-->
+            <div class="row">
+                <div class="col-12">
+                    <label for="basic-comment">Comment</label>
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="bi bi-pencil-fill"></i></span>
+                      </div>
+                      <input type="text" class="form-control" id="basic-comment" placeholder="Enter comment here" aria-describedby="basic-addon1" name="name">
+                    </div>
+                </div>
+            </div>
+        </table>
+        <!--<input type="submit" class="btn btn-success" value="Submit" name="Submit">-->
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Comment <i class="bi bi-check-all"></i></button>
+        {% csrf_token %}
+    </form>
+
   {% endblock content %}
