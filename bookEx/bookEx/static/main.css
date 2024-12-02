@@ -119,3 +119,10 @@ body {
 .clickable {
     cursor: pointer;
 }
+.center-text-AboutUs{
+    text-align: center;
+    font-size: 25px;
+}
+.card-size-AboutUs{
+    width: 15rem;
+}
