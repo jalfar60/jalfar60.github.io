@@ -124,7 +124,7 @@ def book_detail(request, book_id):
     )
 
 def search(request):
-    user_id = request.user.id if request.user.request.user else -1
+    user_id = request.user.id if request.user.is_authenticated else -1
     searchbar = request.POST['searchbar']
     searchbooks = Book.objects.filter(name__contains=searchbar)
     return render(
@@ -144,7 +144,6 @@ def aboutus(request):
 
 
 def deletebook(request, book_id):
-
     book = Book.objects.get(id=book_id)
     book.delete()
 

@@ -40,26 +40,26 @@
                 {% if user.is_authenticated %}
                     <li class="nav-item active px-5">
                         <div class="dropdown">
-                            <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">User</a>
-                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                              <h4 class="dropdown-header">{{ user.username }}</h4>
-                              <div class="dropdown-divider"></div>
-                              <a class="px-4 py-4" href="/favoriteBooks">My Favorite Books</a>
+                            <a class="nav-link dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ user.username }}</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <!-- <h4 class="dropdown-header">{{ user.username }}</h4> -->
+                                <a class="px-4 py-4" href="/favoriteBooks">My Favorite Books</a>
+                                <div class="dropdown-divider"></div>
                                 <form class="px-4 py-3" action="{% url 'logout' %}?next=/" method="post">
                                     <button class="btn btn-outline-danger" type="submit">Logout</button>
                                     {% csrf_token %}
                                 </form>
-                          </div>
+                            </div>
                         </div>
                     </li>
-                    <li class="nav-item px-5"><a class="nav-link" href="/postbook">Post</a></li>
                     <li class="nav-item px-5"><a class="nav-link" href="/displaybooks">Feed</a></li>
+                    <li class="nav-item px-5"><a class="nav-link" href="/postbook">Post</a></li>
                     <li class="nav-item px-5"><a class="nav-link" href="/mybooks">My Books</a></li>
                     <li class="nav-item px-5"><a class="nav-link" href="/aboutus">About Us</a></li>
                 {% else %}
                     <li class="nav-item active px-5"><a class="nav-link btn btn-outline-success" href="{% url 'login' %}?next=/">Login</a></li>
-                    <li class="nav-item px-5"><a class="nav-link disabled" href="#">Post</a></li>
                     <li class="nav-item px-5"><a class="nav-link" href="/displaybooks">Feed</a></li>
+                    <li class="nav-item px-5"><a class="nav-link disabled" href="#">Post</a></li>
                     <li class="nav-item px-5"><a class="nav-link disabled" href="#">My Books</a></li>
                     <li class="nav-item px-5"><a class="nav-link disabled" href="#">About Us</a></li>
                 {% endif %}
