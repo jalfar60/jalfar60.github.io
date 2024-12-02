@@ -11,6 +11,7 @@ from django.contrib.auth import get_user_model
 
 from .models import Book, MainMenu, Rating, Comment, Favorite
 from bookMng.forms import CommentForm
+from bookMng.forms import BookForm
 
 
 User = get_user_model()
@@ -134,6 +135,19 @@ def favoriteBooks(request):
 def book_detail(request, book_id):
     book = Book.objects.get(id=book_id)
     book.pic_path = book.picture.url[14:]
+
+    comments = Comment.objects.all()
+
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            try:
+                comment.book = book_id
+                comment.user = request.user
+            except Exception:
+                pass
+            comment.save()
 
     comments = Comment.objects.all()
 
