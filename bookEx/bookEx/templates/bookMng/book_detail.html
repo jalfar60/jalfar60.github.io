@@ -94,4 +94,22 @@
   {% endblock content %}
 
   {% block script %}
+    <script>
+    const addComment = async () => {
+        const commentText = document.getElementById('basic-comment').value;
+        const book_id = {{ book.id }};
+        const user_id = "{{ user.id }}";
+
+        if (commentText.trim() === "") {
+            alert("Comment cannot be empty!");
+            return;
+        }
+
+        return await fetch("/api/addCommentByBookID/"+book_id+"?comment="+commentText).then((res) => {
+            return res.json();
+        }).then((res) => {
+            return res.comment;
+        })
+    }
+    </script>
   {% endblock script %}
