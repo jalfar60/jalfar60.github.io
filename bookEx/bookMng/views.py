@@ -51,26 +51,26 @@ def postbook(request):
         {"form": form, "submitted": submitted},
     )
 
-# def postcomment(request):
-#     submitted = False
-#     if request.method == "POST":
-#         form = CommentForm(request.POST)
-#         if form.is_valid():
-#             comment = form.save(commit=False)
-#             try:
-#                 comment.book = request.bookid
-#                 comment.user = request.user
-#             except Exception:
-#                 pass
-#             comment.save()
-#     else:
-#         form = CommentForm()
-#         if "submitted" in request.GET:
-#             submitted = True
-#     return render(
-#         request,
-#         "bookMng/book_detail.html",
-#         {"form": form, "submitted": submitted},)
+def postcomment(request,book_id):
+    submitted = False
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            try:
+                comment.book = book_id
+                comment.user = request.user
+            except Exception:
+                pass
+            comment.save()
+    else:
+        form = CommentForm()
+        if "submitted" in request.GET:
+            submitted = True
+    return render(
+        request,
+        "bookMng/postcomment.html",
+        {"form": form, "submitted": submitted},)
 
 def displaybook(request):
     books = Book.objects.all()
@@ -135,19 +135,6 @@ def favoriteBooks(request):
 def book_detail(request, book_id):
     book = Book.objects.get(id=book_id)
     book.pic_path = book.picture.url[14:]
-
-    comments = Comment.objects.all()
-
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            try:
-                comment.book = book_id
-                comment.user = request.user
-            except Exception:
-                pass
-            comment.save()
 
     comments = Comment.objects.all()
 
@@ -326,3 +313,15 @@ def rateByBookID(request, book_id):
         "status": "success"
     }
     return JsonResponse(data)
+
+def bookcomments(request, book_id):
+    comments = Comment.objects.all()
+
+    return render(
+        request,
+        "bookMng/bookcomments.html",
+        {
+            "comments": comments,
+            "bookid": book_id,
+        },
+    )

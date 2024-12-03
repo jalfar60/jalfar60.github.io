@@ -13,6 +13,8 @@ urlpatterns = [
     path("deletebook/<int:book_id>", views.deletebook, name="deletebook"),
     path("aboutus", views.aboutus, name="aboutus"),
     path("search", views.search, name="search"),
+    path("bookcomments/<int:book_id>", views.bookcomments, name="bookcomments"),
+    path("bookcomments/postcomment/<int:book_id>", views.postcomment, name="postcomment"),
 
     path("api/getFavoriteBooks", views.getFavoriteBooks, name="getFavoriteBooks"),
     path("api/toggleFavoritesByBookID/<int:book_id>", views.toggleFavoritesByBookID, name="toggleFavoritesByBookID"),
