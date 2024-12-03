@@ -131,12 +131,11 @@ def favoriteBooks(request):
         },
     )
 
-
 def book_detail(request, book_id):
     book = Book.objects.get(id=book_id)
     book.pic_path = book.picture.url[14:]
 
-    comments = Comment.objects.all()
+    comments = Comment.objects.filter(book=book)
 
     if request.method == "POST":
         form = CommentForm(request.POST)
@@ -285,6 +284,20 @@ def getAverageRatingByBookID(request, book_id):
         "status": "success"
     }
     return JsonResponse(data)
+
+@verify_user_id
+def addCommentByBookID(request, book_id):
+    try:
+        book = Book.objects.get(id=book_id)
+    except Book.DoesNotExist:
+        return JsonResponse({"status": "failed. No rating available for this book or from this user."})
+
+    comment = request.GET.get("comment")
+
+    Comment.objects.create(comment=comment, book=book, user=request.user)
+
+    return JsonResponse({"status": "success"})
+
 
 @verify_user_id
 def rateByBookID(request, book_id):

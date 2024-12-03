@@ -21,5 +21,5 @@ urlpatterns = [
     path("api/rateByBookID/<int:book_id>", views.rateByBookID, name="rateByBookID"),
     path("api/getRatingByBookID/<int:book_id>", views.getRatingByBookID, name="getRatingByBookID"),
     path("api/getAverageRatingByBookID/<int:book_id>", views.getAverageRatingByBookID, name="getAverageRatingByBookID"),
-
+    path("api/addCommentByBookID/<int:book_id>", views.addCommentByBookID, name="addCommentByBookID"),
 ]
