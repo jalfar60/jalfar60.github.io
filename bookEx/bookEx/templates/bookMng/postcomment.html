@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <H1>Post Comment Page.</H1>
+
+    {% if submitted %}
+        <p>Posted comment successfully</p>
+    {% else %}
+      <br>Add new comment:
+      <form action="" enctype="multipart/form-data" method = "post" novalidate>
+          <table>
+  <!--            {{ form.as_table }}-->
+              <div class="row">
+                  <div class="col-12">
+                      <label for="basic-comment">Comment</label>
+                      <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon1"><i class="bi bi-pencil-fill"></i></span>
+                        </div>
+                        <input type="text" class="form-control" id="basic-comment" placeholder="Enter comment here" aria-describedby="basic-addon1" name="name">
+                      </div>
+                  </div>
+              </div>
+          </table>
+          <!--<input type="submit" class="btn btn-success" value="Submit" name="Submit">-->
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Comment <i class="bi bi-check-all"></i></button>
+          {% endif %}
+          {% csrf_token %}
+
+      </form>
+{% endblock content %}
