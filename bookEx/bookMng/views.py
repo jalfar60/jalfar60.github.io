@@ -250,12 +250,15 @@ def getAverageRatingByBookID(request, book_id):
             "avgRating": 0,
             "status": "failed. No rating available for this book or from this user."
         })
-    if len(ratings) == 1:
+    elif len(ratings) == 1:
         sum_of_ratings = ratings[0].rating
     else:
-        sum_of_ratings = reduce(lambda a,b: a.rating + b.rating, ratings)
+        # sum_of_ratings = reduce(lambda a,b: a.rating + b.rating, ratings)
+        sum_of_ratings = 0
+        for rating in ratings:
+            sum_of_ratings += rating.rating
     total_raters = len(ratings)
-    avgRating = sum_of_ratings / total_raters
+    avgRating = round(sum_of_ratings / total_raters, 2)
 
     data = {
         "avgRating": avgRating,
