@@ -22,14 +22,19 @@
               <div class="book_card__header">
                 {% if myBook == 1 %}
                   <div class="flex-row space-between">
-                    <h3><a href="/user/{{ book.username.id }}">{{ book.username }}</a> - <a href="/book_detail/{{ book.id }}">{{ book.name }}</a></h3>
+                    <div>
+                      <!-- <h4><a href="/user/{{ book.username.id }}">User: {{ book.username }}</a></h4> -->
+                      <h5><a href="/book_detail/{{ book.id }}">{{ book.name }}</a></h5>
+                    </div>
                     <label><a class="btn btn-outline-dark" href="deletebook/{{ book.id }}"><i class="bi bi-trash3-fill"></i></a></label>
                   </div>
                 {% else %}
                   {% if book.username.id == user_id%}
-                    <h3><a href="/user/{{ book.username.id }}">{{ book.username }}</a> - <a href="/book_detail/{{ book.id }}">{{ book.name }}</a></h3>
+                    <!-- <h4><a href="/user/{{ book.username.id }}">User: {{ book.username }}</a></h4> -->
+                    <h5><a href="/book_detail/{{ book.id }}">{{ book.name }}</a></h5>
                   {% else %}
-                    <h3><a href="/user/{{ book.username.id }}">{{ book.username }}</a> - <a href="/book_detail/{{ book.id }}">{{ book.name }}</a></h3>
+                    <!-- <h4><a href="/user/{{ book.username.id }}">User: {{ book.username }}</a></h4> -->
+                    <h5><a href="/book_detail/{{ book.id }}">{{ book.name }}</a></h5>
                   {% endif %}
                 {% endif %}
               </div>
@@ -42,8 +47,8 @@
                   <div class="card_rating_by_user"></div>
                   <i class="card_favorites_icon clickable bi" onClick="toggleFavoriteBook({{ book.id }})"></i>
                 </div>
-                <p class="card_avg_rating">Average rating: 3*</p>
-                <p><b>{{ book.username }}</b>: (This user has not posted a description)</p>
+                <p class="card_avg_rating" style="margin: 0;">Average rating: 3*</p>
+                <p>Posted by: <a href="/user/{{ book.username.id }}">{{ book.username }}</a></p>
                 <a href="/book_detail/{{ book.id }}">View comments</a>
               </div>
             </div>

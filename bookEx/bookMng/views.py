@@ -51,27 +51,6 @@ def postbook(request):
         {"form": form, "submitted": submitted},
     )
 
-def postcomment(request,book_id):
-    submitted = False
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            try:
-                comment.book = book_id
-                comment.user = request.user
-            except Exception:
-                pass
-            comment.save()
-    else:
-        form = CommentForm()
-        if "submitted" in request.GET:
-            submitted = True
-    return render(
-        request,
-        "bookMng/postcomment.html",
-        {"form": form, "submitted": submitted},)
-
 def displaybook(request):
     books = Book.objects.all()
     user_id = request.user.id if request.user.is_authenticated else -1
@@ -326,15 +305,3 @@ def rateByBookID(request, book_id):
         "status": "success"
     }
     return JsonResponse(data)
-
-def bookcomments(request, book_id):
-    comments = Comment.objects.all()
-
-    return render(
-        request,
-        "bookMng/bookcomments.html",
-        {
-            "comments": comments,
-            "bookid": book_id,
-        },
-    )
